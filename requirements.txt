@@ -2,4 +2,4 @@ slack-sdk
 slack-bolt
 openai
 python-dotenv
-pinecone-client
+pinecone
