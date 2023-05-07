@@ -33,4 +33,4 @@ jobs:
         SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        slack-gpt-chat.py
+        python slack-gpt-chat.py
