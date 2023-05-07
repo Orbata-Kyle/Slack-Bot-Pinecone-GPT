@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from dotenv import load_dotenv
 import pinecone
 
@@ -10,6 +11,22 @@ OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
 pinecone.init(api_key=PINECONE_API_KEY)  # Initialize Pinecone
+
+pinecone_index = "orbatabot-dd2f3c4.svc.us-central1-gcp.pinecone.io"  # Set your Pinecone index name
+pinecone_vector_length = 768  # Set the length of the Pinecone vectors
+
+# Function to fetch memory vectors from Pinecone
+def pinecone_fetch(index_name, ids):
+    with pinecone.deployment(index_name=index_name) as index:
+        return index.fetch(ids)
+
+# Function to upsert memory vectors to Pinecone
+def pinecone_upsert(index_name, items):
+    with pinecone.deployment(index_name=index_name) as index:
+        return index.upsert(items)
+
+# The rest of your code remains the same
+
 
 from slack_sdk import WebClient
 
