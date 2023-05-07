@@ -17,16 +17,13 @@ pinecone_vector_length = 768  # Set the length of the Pinecone vectors
 
 # Function to fetch memory vectors from Pinecone
 def pinecone_fetch(index_name, ids):
-    with pinecone.deployment(index_name=index_name) as index:
-        return index.fetch(ids)
+    with pinecone.Client(index_name=index_name) as client:
+        return client.fetch(ids)
 
 # Function to upsert memory vectors to Pinecone
 def pinecone_upsert(index_name, items):
-    with pinecone.deployment(index_name=index_name) as index:
-        return index.upsert(items)
-
-# The rest of your code remains the same
-
+    with pinecone.Client(index_name=index_name) as client:
+        return client.upsert(items)
 
 from slack_sdk import WebClient
 
