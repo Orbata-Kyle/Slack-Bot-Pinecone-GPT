@@ -1,4 +1,4 @@
-name: orbatabot
+name: slack-gpt-chat.py
 
 on:
   push:
