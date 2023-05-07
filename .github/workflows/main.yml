@@ -21,9 +21,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Install Pinecone
-      run: |
-        pip install --upgrade --no-cache-dir --extra-index-url https://test.pypi.org/simple/ pinecone-client
+
     - name: Run script
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
