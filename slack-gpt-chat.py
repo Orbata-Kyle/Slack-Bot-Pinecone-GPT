@@ -1,8 +1,7 @@
 import os
 import numpy as np
 from dotenv import load_dotenv
-from pinecone import PineconeClient
-import pinecone
+from pinecone import Pinecone
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -18,12 +17,12 @@ pinecone_vector_length = 768  # Set the length of the Pinecone vectors
 
 # Function to fetch memory vectors from Pinecone
 def pinecone_fetch(index_name, ids):
-    with PineconeClient(index_name=index_name) as client:
+    with Pinecone(index_name=index_name) as client:
         return client.fetch(ids)
 
 # Function to upsert memory vectors to Pinecone
 def pinecone_upsert(index_name, items):
-    with pineconeClient(index_name=index_name) as client:
+    with Pinecone(index_name=index_name) as client:
         return client.upsert(items)
 
 from slack_sdk import WebClient
