@@ -1,9 +1,5 @@
 name: Your Workflow Name
 
-slack-sdk
-slack-bolt
-openai
-
 on:
   push:
     branches:
