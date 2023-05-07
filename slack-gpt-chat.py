@@ -15,13 +15,14 @@ pinecone_vector_length = 768  # Set the length of the Pinecone vectors
 
 # Function to fetch memory vectors from Pinecone
 def pinecone_fetch(index_name, ids):
-    with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
-        return pinecone_client.fetch(index_name=index_name, ids=ids)
+    index = pinecone.Index(index_name)
+    fetched_vectors = index.fetch(ids=ids)
+    return fetched_vectors
 
 # Function to upsert memory vectors to Pinecone
 def pinecone_upsert(index_name, items):
-    with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
-        return pinecone_client.upsert(index_name=index_name, items=items)
+    with pinecone.connection(api_key=PINECONE_API_KEY)pinecone.init(api_key=PINECONE_API_KEY, environment="us-central1-gcp")
+eturn pinecone_client.upsert(index_name=index_name, items=items)
 
 from slack_sdk import WebClient
 
@@ -105,4 +106,4 @@ if __name__ == "__main__":
         handler = SocketModeHandler(app, SLACK_APP_TOKEN)
         handler.start()
     finally:
-        pass
+        pinecone.deinit()
