@@ -10,8 +10,6 @@ SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
-pinecone.deinit()
-
 pinecone_index = "orbatabot-dd2f3c4.svc.us-central1-gcp.pinecone.io"  # Set your Pinecone index name
 pinecone_vector_length = 768  # Set the length of the Pinecone vectors
 
