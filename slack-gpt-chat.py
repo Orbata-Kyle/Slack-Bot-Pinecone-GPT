@@ -10,20 +10,20 @@ SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
-pinecone.init(api_key=PINECONE_API_KEY)  # Initialize Pinecone
+pinecone.deinit()
 
 pinecone_index = "orbatabot-dd2f3c4.svc.us-central1-gcp.pinecone.io"  # Set your Pinecone index name
 pinecone_vector_length = 768  # Set the length of the Pinecone vectors
 
 # Function to fetch memory vectors from Pinecone
 def pinecone_fetch(index_name, ids):
-    with pinecone.Client(index_name=index_name) as client:
-        return client.fetch(ids)
+    with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
+        return pinecone_client.fetch(index_name=index_name, ids=ids)
 
 # Function to upsert memory vectors to Pinecone
 def pinecone_upsert(index_name, items):
-    with pinecone.Client(index_name=index_name) as client:
-        return client.upsert(items)
+    with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
+        return pinecone_client.upsert(index_name=index_name, items=items)
 
 from slack_sdk import WebClient
 
@@ -107,5 +107,3 @@ if __name__ == "__main__":
         handler = SocketModeHandler(app, SLACK_APP_TOKEN)
         handler.start()
     finally:
-        # Clean up Pinecone resources
-        pinecone.deinit()
