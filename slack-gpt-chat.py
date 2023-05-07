@@ -21,8 +21,9 @@ def pinecone_fetch(index_name, ids):
 
 # Function to upsert memory vectors to Pinecone
 def pinecone_upsert(index_name, items):
-    with pinecone.connection(api_key=PINECONE_API_KEY)pinecone.init(api_key=PINECONE_API_KEY, environment="us-central1-gcp")
-eturn pinecone_client.upsert(index_name=index_name, items=items)
+    pinecone.init(api_key=PINECONE_API_KEY, environment="us-central1-gcp")
+    with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
+        return pinecone_client.upsert(index_name=index_name, items=items)
 
 from slack_sdk import WebClient
 
