@@ -1,8 +1,15 @@
 import os
+from dotenv import load_dotenv
+import pinecone
+
+load_dotenv()  # Load environment variables from .env file
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
+
+pinecone.init(api_key=PINECONE_API_KEY)  # Initialize Pinecone
 
 from slack_sdk import WebClient
 
