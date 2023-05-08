@@ -10,8 +10,8 @@ SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
-pinecone_index = os.getenv("PINECONE_INDEX")
-pinecone_vector_length = int(os.getenv("PINECONE_VECTOR_LENGTH"))
+pinecone_index = os.getenv("PINECONE_INDEX", "your_default_index")
+pinecone_vector_length = int(os.getenv("PINECONE_VECTOR_LENGTH", 768))
 
 print("Pinecone index:", pinecone_index)
 print("Pinecone vector length:", pinecone_vector_length)
