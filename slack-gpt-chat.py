@@ -10,11 +10,11 @@ SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
-pinecone_index = os.getenv("PINECONE_INDEX", "your_default_index")
-pinecone_vector_length = 768
+pinecone.init(api_key=PINECONE_API_KEY)
 
-print("Pinecone index:", pinecone_index)
-print("Pinecone vector length:", pinecone_vector_length)
+PINECONE_INDEX="orbatabot"
+index_name=PINECONE_INDEX
+PINECONE_VECTOR_LENGTH=768
 
 # Function to fetch memory vectors from Pinecone
 def pinecone_fetch(index_name, ids):
@@ -32,6 +32,9 @@ from slack_sdk import WebClient
 
 client = WebClient(SLACK_BOT_TOKEN)
 
+# Get the bot user ID
+bot_user_id = client.auth_test()["user_id"]
+
 import os
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -44,6 +47,8 @@ app = App(token=SLACK_BOT_TOKEN)
 def handle_app_mention_events(body, client, logger):
     logger.info(body)
     event = body['event']
+    bot_mention = f"<@{bot_user_id}>"
+
     if "files" in event:
         # Image input
         for file in event["files"]:
@@ -55,16 +60,19 @@ def handle_app_mention_events(body, client, logger):
                 post_response(event["channel"], body, response, client)
     elif "text" in event:
         # Text input
-        text_input = event["text"]
-        logger.info(f"Received text input: {text_input}")
-        response = generate_response(text_input)
-        post_response(event["channel"], body, response, client)
+        text = event["text"]
+        if bot_mention in text:
+            text_input = text.replace(bot_mention, "").strip()
+            logger.info(f"Received text input: {text_input}")
+            response = generate_response(text_input)
+            post_response(event["channel"], body, response, client)
 
 def generate_response(prompt):
     openai.api_key = OPENAI_API_KEY
 
     # Fetch the memory vector from Pinecone
-    memory_vector, = pinecone_fetch(index_name=pinecone_index, ids=[prompt])
+    memory_vector, = pinecone_fetch(index_name=PINECONE_INDEX, ids=[prompt])
+
 
     if memory_vector is None:
         # No memory vector found, generate a new response
