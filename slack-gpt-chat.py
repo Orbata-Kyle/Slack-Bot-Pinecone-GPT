@@ -2,10 +2,17 @@ import pinecone
 import os
 import numpy as np
 from dotenv import load_dotenv
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="./my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
 
-SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
+client = WebClient(token=SLACK_BOT_TOKEN)
+
+load_dotenv(dotenv_path="./my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
+
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
