@@ -119,42 +119,6 @@ def handle_app_mention_events(body, client, logger):
             logger.info(f"Received text input: {text_input}")
             response = generate_response(text_input)
             post_response(event["channel"], body, response, client)
-            def generate_response(prompt):
-    openai.api_key = OPENAI_API_KEY
-
-    # Fetch the memory vector from Pinecone
-    memory_vector, = pinecone_fetch(index_name=PINECONE_INDEX, ids=[prompt])
-
-    if memory_vector is None:
-        # No memory vector found, generate a new response
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt},
-            ],
-        )
-        response_text = response.choices[0].message["content"]
-
-        # Generate a memory vector for the new response
-        memory_vector = np.random.rand(pinecone_vector_length)
-
-        # Store the memory vector in Pinecone
-        pinecone_upsert(index_name=pinecone_index, items={prompt: memory_vector})
-
-    else:
-        # Memory vector found, generate a response using the memory vector
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt},
-            ],
-            memory=memory_vector.tolist(),
-        )
-        response_text = response.choices[0].message["content"]
-
-    return response_text
 
 # Function to post response to Slack channel
 def post_response(channel_id, body, response, client):
@@ -170,4 +134,3 @@ if __name__ == "__main__":
         handler.start()
     finally:
         pinecone.deinit()
-
