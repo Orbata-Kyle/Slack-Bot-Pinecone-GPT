@@ -81,6 +81,7 @@ def generate_response(prompt):
 
     return response_text
 
+
 from slack_sdk import WebClient
 
 client = WebClient(SLACK_BOT_TOKEN)
