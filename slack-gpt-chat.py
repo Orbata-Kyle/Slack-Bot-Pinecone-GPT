@@ -10,7 +10,7 @@ SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
-pinecone.init(api_key="PINECONE_API_KEY")
+pinecone.init(api_key=PINECONE_API_KEY
 
 PINECONE_INDEX="orbatabot"
 index_name=PINECONE_INDEX
@@ -27,6 +27,21 @@ def pinecone_upsert(index_name, items):
     pinecone.init(api_key=PINECONE_API_KEY, environment="us-central1-gcp")
     with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
         return pinecone_client.upsert(index_name=index_name, items=items)
+              
+def response_to_vector(response_text):
+    # Convert response_text to a vector
+    # ...
+    # return the vector
+              
+# Generate a memory vector for the new response
+        memory_vector = response_to_vector(response_text)
+
+# Store the memory vector in Pinecone
+        pinecone_upsert(index_name=pinecone_index, items={prompt: memory_vector})
+              
+def generate_response(prompt):
+              
+             
 
 from slack_sdk import WebClient
 
@@ -115,6 +130,7 @@ def post_response(channel_id, body, response, client):
 
 if __name__ == "__main__":
     try:
+        pinecone.init(api_key=PINECONE_API_KEY)
         handler = SocketModeHandler(app, SLACK_APP_TOKEN)
         handler.start()
     finally:
