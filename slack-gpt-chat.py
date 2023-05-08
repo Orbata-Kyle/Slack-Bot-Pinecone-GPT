@@ -3,14 +3,14 @@ import os
 import numpy as np
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="./DOT_ENV") # Load environment variables from .env file
+load_dotenv(dotenv_path="Orbata-Kyle/Slack-Bot-Pinecone-GPT/my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
-pinecone.init(api_key=PINECONE_API_KEY)
+pinecone.init(api_key="PINECONE_API_KEY")
 
 PINECONE_INDEX="orbatabot"
 index_name=PINECONE_INDEX
