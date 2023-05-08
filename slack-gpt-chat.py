@@ -3,7 +3,7 @@ import os
 import numpy as np
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="Orbata-Kyle/Slack-Bot-Pinecone-GPT/my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
+load_dotenv(dotenv_path="./my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
