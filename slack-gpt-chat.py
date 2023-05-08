@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
 
-print("SLACK_BOT_TOKEN:", SLACK_BOT_TOKEN)
-print("SLACK_APP_TOKEN:", SLACK_APP_TOKEN)
-
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
