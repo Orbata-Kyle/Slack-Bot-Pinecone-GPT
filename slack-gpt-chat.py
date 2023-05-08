@@ -15,6 +15,7 @@ load_dotenv(dotenv_path="./my_secrets/DOT_ENV")  # Update the path to your DOT_E
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
+PINECONE_INDEX = os.environ["PINECONE_INDEX"]
 
 pinecone.init(api_key=PINECONE_API_KEY)
 
