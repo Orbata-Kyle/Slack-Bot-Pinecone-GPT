@@ -4,14 +4,13 @@ import numpy as np
 from dotenv import load_dotenv
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="./my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
+load_dotenv(dotenv_path="./my_secrets/DOT_ENV")  # Update the path to your DOT_ENV file
 
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 client = WebClient(token=SLACK_BOT_TOKEN)
 
-load_dotenv(dotenv_path="./my_secrets/DOT_ENV") # Update the path to your DOT_ENV file
+load_dotenv(dotenv_path="./my_secrets/DOT_ENV")  # Update the path to your DOT_ENV file
 
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
@@ -19,8 +18,8 @@ PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 
 pinecone.init(api_key=PINECONE_API_KEY)
 
-index_name=PINECONE_INDEX
-PINECONE_VECTOR_LENGTH=768
+index_name = PINECONE_INDEX
+PINECONE_VECTOR_LENGTH = 768
 
 # Function to fetch memory vectors from Pinecone
 def pinecone_fetch(index_name, ids):
@@ -33,21 +32,20 @@ def pinecone_upsert(index_name, items):
     pinecone.init(api_key=PINECONE_API_KEY, environment="us-central1-gcp")
     with pinecone.connection(api_key=PINECONE_API_KEY) as pinecone_client:
         return pinecone_client.upsert(index_name=index_name, items=items)
-              
+
 def response_to_vector(response_text):
     # Convert response_text to a vector
     # ...
     # return the vector
-              
+
 # Generate a memory vector for the new response
-        memory_vector = response_to_vector(response_text)
+    memory_vector = response_to_vector(response_text)
 
 # Store the memory vector in Pinecone
-        pinecone_upsert(index_name=pinecone_index, items={prompt: memory_vector})
-              
+    pinecone_upsert(index_name=pinecone_index, items={prompt: memory_vector})
+
 def generate_response(prompt):
-              
-             
+    pass
 
 from slack_sdk import WebClient
 
@@ -87,13 +85,11 @@ def handle_app_mention_events(body, client, logger):
             logger.info(f"Received text input: {text_input}")
             response = generate_response(text_input)
             post_response(event["channel"], body, response, client)
-
-def generate_response(prompt):
+            def generate_response(prompt):
     openai.api_key = OPENAI_API_KEY
 
     # Fetch the memory vector from Pinecone
     memory_vector, = pinecone_fetch(index_name=PINECONE_INDEX, ids=[prompt])
-
 
     if memory_vector is None:
         # No memory vector found, generate a new response
@@ -126,7 +122,6 @@ def generate_response(prompt):
 
     return response_text
 
-
 # Function to post response to Slack channel
 def post_response(channel_id, body, response, client):
     # Reply to thread 
@@ -141,3 +136,4 @@ if __name__ == "__main__":
         handler.start()
     finally:
         pinecone.deinit()
+
