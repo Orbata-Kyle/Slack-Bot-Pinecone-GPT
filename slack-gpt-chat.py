@@ -3,7 +3,7 @@ import os
 import numpy as np
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv(dotenv_path="./DOT_ENV") # Load environment variables from .env file
 
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]
