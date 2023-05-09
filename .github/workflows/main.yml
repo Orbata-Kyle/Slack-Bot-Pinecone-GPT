@@ -29,5 +29,6 @@ jobs:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
         PINECONE_INDEX: ${{ secrets.PINECONE_INDEX }}
+        PINECONE_URL: ${{ secrets.PINECONE_URL }}
       run: |
         python slack-gpt-chat.py
