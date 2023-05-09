@@ -50,7 +50,6 @@ def generate_response(prompt):
             ],
         )
 
-        )
         response_text = response.choices[0].message["content"]
 
         memory_vector = np.random.rand(pinecone_vector_length)
@@ -68,7 +67,6 @@ def generate_response(prompt):
         response_text = response.choices[0].message["content"]
 
     return response_text
-
 
 client = WebClient(slack_bot_token)
 bot_user_id = client.auth_test()["user_id"]
