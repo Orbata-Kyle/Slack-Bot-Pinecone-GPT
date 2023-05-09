@@ -48,6 +48,8 @@ def generate_response(prompt):
                 {"role": "user", "content": prompt},
             ],
         )
+
+        )
         response_text = response.choices[0].message["content"]
 
         memory_vector = np.random.rand(pinecone_vector_length)
