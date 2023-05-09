@@ -26,7 +26,6 @@ def pinecone_fetch(index_name, ids):
     return fetched_vectors
 
 def pinecone_upsert(index_name, items):
-    pinecone.init(api_key=pinecone_api_key, environment="us-central1-gcp")
     with pinecone.connection(api_key=pinecone_api_key) as pinecone_client:
         return pinecone_client.upsert(index_name=index_name, items=items)
 
