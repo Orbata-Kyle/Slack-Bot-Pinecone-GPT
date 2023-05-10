@@ -1,5 +1,9 @@
-slack-sdk
-slack-bolt
+slack_sdk
+slack_bolt
 openai
+pinecone-io
 python-dotenv
-pinecone-client
+torch
+clip==1.0
+pillow
+requests
