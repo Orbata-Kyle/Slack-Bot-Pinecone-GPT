@@ -7,6 +7,11 @@ import pinecone
 import openai
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+import torch
+import clip
+from PIL import Image
+import requests
+from io import BytesIO
 
 load_dotenv(dotenv_path="./my_secrets/DOT_ENV")  # Update the path to your DOT_ENV file
 
@@ -16,7 +21,10 @@ openai_api_key = os.environ["OPENAI_API_KEY"]
 pinecone_api_key = os.environ["PINECONE_API_KEY"]
 pinecone_index = os.environ["PINECONE_INDEX"]
 pinecone_url = os.environ["PINECONE_URL"]
-pinecone_vector_length = 800
+
+# Load the model
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model, transform = clip.load("ViT-B/32", device=device)
 
 def pinecone_fetch(index_name, ids):
     index = pinecone.Index(index_name)
@@ -28,12 +36,20 @@ def pinecone_upsert(index_name, items):
         return pinecone_client.upsert(index_name=index_name, items=items)
 
 def response_to_vector(response_text):
-    # Convert response_text to a vector
-    # ...
-    # return the vector
-    return None  # Placeholder return statement
+    text_inputs = torch.tensor([clip.tokenize(response_text)]).to(device)
+    text_features = model.encode_text(text_inputs)
+    text_features /= text_features.norm(dim=-1, keepdim=True)
+    return text_features.cpu().numpy()[0]
 
-def generate_response(prompt):
+def image_to_vector(image_url):
+    response = requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
+    image_input = transform(img).unsqueeze(0).to(device)
+    image_features = model.encode_image(image_input)
+    image_features /= image_features.norm(dim=-1, keepdim=True)
+    return image_features.cpu().numpy()[0]
+
+def generate_response(prompt, image_url=None):
     openai.api_key = openai_api_key
 
     memory_vector, = pinecone_fetch(index_name=pinecone_index, ids=[prompt])
@@ -48,8 +64,11 @@ def generate_response(prompt):
         )
 
         response_text = response.choices[0].message["content"]
-
-        memory_vector = np.random.rand(pinecone_vector_length)
+        if image_url is None:
+            memory_vector = response_to_vector(response_text)
+        else:
+            memory_vector = image_to_vector(image_url)
+        
         pinecone_upsert(index_name=pinecone_index, items={prompt: memory_vector})
 
     else:
@@ -82,7 +101,7 @@ def handle_app_mention_events(body, client, logger):
                 image_url = file["url_private_download"]
                 logger.info(f"Received image input: {image_url}")
                 prompt = f"Generate a caption for this image: {image_url}"
-                response = generate_response(prompt)
+                response = generate_response(prompt, image_url)
                 post_response(event["channel"], body, response, client)
     elif "text" in event:
         text = event["text"]
@@ -106,3 +125,4 @@ if __name__ == "__main__":
         handler.start()
     finally:
         pinecone.deinit()
+
