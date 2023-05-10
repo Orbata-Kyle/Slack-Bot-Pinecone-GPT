@@ -1,7 +1,5 @@
-slack_sdk
-slack_bolt
+slack-sdk
+slack-bolt
 openai
-pinecone-io
 python-dotenv
-sentence-transformers
-torch
+pinecone-client
