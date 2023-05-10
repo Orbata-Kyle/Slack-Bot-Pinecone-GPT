@@ -3,7 +3,5 @@ slack_bolt
 openai
 pinecone-io
 python-dotenv
+sentence-transformers
 torch
-clip==1.0
-pillow
-requests
