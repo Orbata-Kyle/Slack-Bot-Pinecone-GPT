@@ -16,7 +16,6 @@ openai_api_key = os.environ["OPENAI_API_KEY"]
 pinecone_api_key = os.environ["PINECONE_API_KEY"]
 pinecone_index = os.environ["PINECONE_INDEX"]
 pinecone_url = os.environ["PINECONE_URL"]
-pincone_name = os.environ["PINECONE_NAME"]
 pinecone_vector_length = 800
 
 pinecone.init(api_key=pinecone_api_key, environment=pinecone_url)
