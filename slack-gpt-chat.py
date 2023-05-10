@@ -18,8 +18,6 @@ pinecone_index = os.environ["PINECONE_INDEX"]
 pinecone_url = os.environ["PINECONE_URL"]
 pinecone_vector_length = 800
 
-pinecone.init(api_key=pinecone_api_key, environment=pinecone_url)
-
 def pinecone_fetch(index_name, ids):
     index = pinecone.Index(index_name)
     fetched_vectors = index.fetch(ids=ids)
@@ -92,8 +90,8 @@ def handle_app_mention_events(body, client, logger):
             text_input = text.replace(bot_mention, "").strip()
             logger.info(f"Received text input: {text_input}")
             response = generate_response(text_input)
-            post_response(event["channel"],             body, response, client)
-
+            post_response(event["channel"], body, response, client)
+            
 def post_response(channel_id, body, response, client):
     client.chat_postMessage(
         channel=body["event"]["channel"], 
@@ -103,7 +101,7 @@ def post_response(channel_id, body, response, client):
 
 if __name__ == "__main__":
     try:
-        pinecone.init(api_key=pinecone_api_key)
+        pinecone.init(api_key=pinecone_api_key, environment=pinecone_url)
         handler = SocketModeHandler(app, slack_app_token)
         handler.start()
     finally:
